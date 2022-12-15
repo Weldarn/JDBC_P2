@@ -1,0 +1,46 @@
+package entreprise;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.*;
+import java.util.Scanner;
+public class Exo_8_Pstatement {
+
+    public static void main(String[] args) {
+    	
+    	Scanner saisieUtilisateur = new Scanner(System.in);
+    	System.out.println("Veuillez saisir un numéro de service :");
+    	Float reponse = saisieUtilisateur.nextFloat();
+    	System.out.println("Veuillez saisir le salaire :");
+    	Float reponsesal = saisieUtilisateur.nextFloat();
+
+    	saisieUtilisateur.close();
+    	try
+        {
+            Class.forName("org.postgresql.Driver");
+
+            Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/entreprise", "postgres", "SoulCrip03!");
+            
+            PreparedStatement stmt = connection.prepareStatement("SELECT nom, emploi, sal, noserv FROM emp WHERE noserv = (?) AND sal > (?)");
+            stmt.setFloat(1,reponse);
+            stmt.setFloat(2,reponsesal);
+            
+            ResultSet res = stmt.executeQuery();	
+            	
+            	while(res.next()) {
+            		
+            		
+            		System.out.println(res.getString("nom"));
+            		System.out.println(res.getString("emploi"));
+            		System.out.println(res.getFloat("sal"));
+            		System.out.println(res.getInt("noserv"));
+            	}
+   
+            	connection.close();
+        }
+        catch(Exception e) {
+            System.out.println(e);
+            System.out.println("Sa marche pas");
+        }
+    }
+
+}
