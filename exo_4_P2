@@ -1,0 +1,40 @@
+package entreprise;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.*;
+
+public class Exo_4_Pstatement {
+
+    public static void main(String[] args) {
+    	
+    	try
+        {
+            Class.forName("org.postgresql.Driver");
+
+            Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/entreprise", "postgres", "SoulCrip03!");
+            
+            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM emp INNER JOIN serv ON emp.noserv = serv.noserv WHERE service =(?)");
+            stmt.setString(1,"INFORMATIQUE");
+            
+            ResultSet res= stmt.executeQuery();
+            
+            	while(res.next()) {
+            		
+            		System.out.println(res.getString("nom"));
+            		System.out.println(res.getString("prenom"));
+            		System.out.println(res.getString("service"));
+            		
+            	}
+   
+                
+                
+
+            	connection.close();
+        }
+        catch(Exception e) {
+            System.out.println(e);
+            System.out.println("Sa marche pas");
+        }
+    }
+
+}
